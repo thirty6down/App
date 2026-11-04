@@ -9,7 +9,7 @@ import { useArtistContext } from '../../../providers/Artist'
 import { useArtistPlaylists } from '../../../hooks/use-artist-playlists'
 import ArtistListHeader from '../list-header'
 import ItemRow from '../../Global/components/item-row'
-import List from '../../Global/components/Lists/utils'
+import List, { LIST_HORIZONTAL_MARGIN } from '../../Global/components/Lists/utils'
 import { closeAllSwipeableRows } from '../../Global/components/SwipeableRow/registery'
 
 /** The playlists, the user's own and public ones, that this artist appears on */
@@ -87,7 +87,10 @@ export default function PlaylistsTab(): React.JSX.Element {
 			}
 			ListHeaderComponent={
 				<>
-					<ArtistListHeader />
+					{/* The list insets its content; the header runs edge to edge, as it does on the other tabs */}
+					<View marginHorizontal={-LIST_HORIZONTAL_MARGIN}>
+						<ArtistListHeader />
+					</View>
 
 					{playlists.length > 0 ? failureNotice : null}
 				</>

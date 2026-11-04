@@ -5,7 +5,7 @@ import { LibrarySectionListData, LibrarySectionListRenderItemInfo } from '../../
 import { SizableText, useTheme, View, XStack, YStack } from 'tamagui'
 import { RefreshControl } from 'react-native'
 import { closeAllSwipeableRows } from '../SwipeableRow/registery'
-import AZScroller from '../AZScroller'
+import AZScroller, { AZ_SCROLLER_CLEARANCE } from '../AZScroller'
 import ListStickyHeader from './list-sticky-header'
 
 interface ItemSectionListProps {
@@ -25,12 +25,23 @@ export default function ItemSectionList({
 }: ItemSectionListProps) {
 	const theme = useTheme()
 
+	/**
+	 * With a header, the A-Z scroller floats over the list instead of taking a column beside it, so the
+	 * header (an artist's image, say) can run edge to edge. Rows then leave room for it themselves.
+	 */
+	const scrollerOverlaysList = !!ListHeaderComponent
+
 	const onRefresh = () => {
 		query.refetch()
 	}
 
 	const render = (info: LibrarySectionListRenderItemInfo) => (
-		<View marginHorizontal='2'>{renderItem(info)}</View>
+		<View
+			marginHorizontal='2'
+			marginRight={scrollerOverlaysList ? AZ_SCROLLER_CLEARANCE : undefined}
+		>
+			{renderItem(info)}
+		</View>
 	)
 
 	return (
@@ -68,7 +79,14 @@ export default function ItemSectionList({
 				}
 			/>
 
-			<AZScroller query={query} reverseOrder={sortDescending} sectionListRef={ref} />
+			<XStack
+				position={scrollerOverlaysList ? 'absolute' : 'relative'}
+				right={0}
+				top={0}
+				bottom={0}
+			>
+				<AZScroller query={query} reverseOrder={sortDescending} sectionListRef={ref} />
+			</XStack>
 		</XStack>
 	)
 }

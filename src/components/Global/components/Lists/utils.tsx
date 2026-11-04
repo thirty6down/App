@@ -3,6 +3,9 @@ import { BaseItemDto } from '@jellyfin/sdk/lib/generated-client'
 import { LegendList, LegendListProps, LegendListRef } from '@legendapp/list/react-native'
 import { Ref } from 'react'
 
+/** Horizontal inset the list puts around everything in it, header included */
+export const LIST_HORIZONTAL_MARGIN = 8
+
 type ListType = (BaseItemDto | string | number) | BaseItemDto
 
 type ListProps<T extends ListType> = Omit<LegendListProps<T>, 'keyExtractor' | 'recycleItems'> & {
@@ -23,7 +26,7 @@ export default function List<T extends ListType>({ horizontal, ...props }: ListP
 	const contentContainerStyle = horizontal
 		? undefined
 		: {
-				marginHorizontal: 8,
+				marginHorizontal: LIST_HORIZONTAL_MARGIN,
 			}
 
 	return (
